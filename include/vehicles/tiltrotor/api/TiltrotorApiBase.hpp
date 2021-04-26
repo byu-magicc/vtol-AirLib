@@ -73,8 +73,13 @@ public: //optional overrides
     //below method exist for any firmwares that may want to use ground truth for debugging purposes
     virtual void setSimulatedGroundTruth(const Kinematics::State* kinematics, const Environment* environment)
     {
-        unused(kinematics);
-        unused(environment);
+        kinematics_ = kinematics;
+        environment_ = environment;
+    }
+
+    virtual void setCollisionInfo(const CollisionInfo& collision_info)
+    {
+        collision_info_ = collision_info;
     }
 
     virtual void resetImplementation() override;
@@ -129,10 +134,21 @@ public: //these APIs uses above low level APIs
         return rotor_states_;
     }
 
+    Kinematics::State getKinematicsGroundTruth() const
+    {
+        Kinematics::State state;
+        state.pose.position = kinematics_->pose.position;
+        state.pose.orientation = kinematics_->pose.orientation;
+        state.twist.linear = kinematics_->twist.linear;
+        state.twist.angular = kinematics_->twist.angular;
+        return state;
+    }
+
     TiltrotorState getTiltrotorState() const
     {
         TiltrotorState state;
         state.kinematics_estimated = getKinematicsEstimated();
+        state.kinematics_true = getKinematicsGroundTruth();
         //TODO: add GPS health, accuracy in API
         state.gps_location = getGpsLocation();
         state.timestamp = clock()->nowNanos();
@@ -354,6 +370,10 @@ private: //variables
     float approx_zero_vel_ = 0.05f;
     float approx_zero_angular_vel_ = 0.01f;
     RotorTiltableStates rotor_states_;
+
+    CollisionInfo collision_info_;
+    const Kinematics::State* kinematics_;
+    const Environment* environment_;
 };
 
 }} //namespace

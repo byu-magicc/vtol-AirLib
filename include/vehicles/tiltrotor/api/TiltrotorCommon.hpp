@@ -38,6 +38,7 @@ struct RotorTiltableStates {
 
     RotorTiltableStates()
     {}
+
     RotorTiltableStates(const std::vector<RotorTiltableParameters>& rotors_val, uint64_t timestamp_val)
         : rotors(rotors_val), timestamp(timestamp_val)
     {
@@ -71,6 +72,7 @@ struct TiltrotorApiParams {
 struct TiltrotorState {
     CollisionInfo collision;
     Kinematics::State kinematics_estimated;
+    Kinematics::State kinematics_true;
     GeoPoint gps_location;
     uint64_t timestamp;
     LandedState landed_state;
@@ -82,9 +84,9 @@ struct TiltrotorState {
     TiltrotorState()
     {}
     TiltrotorState(const CollisionInfo& collision_val, const Kinematics::State& kinematics_estimated_val,
-        const GeoPoint& gps_location_val, uint64_t timestamp_val,
+        const Kinematics::State& kinematics_true_val, const GeoPoint& gps_location_val, uint64_t timestamp_val,
         LandedState landed_state_val, const RCData& rc_data_val, bool ready_val, const std::string& message, bool can_arm_val)
-        : collision(collision_val), kinematics_estimated(kinematics_estimated_val),
+        : collision(collision_val), kinematics_estimated(kinematics_estimated_val), kinematics_true(kinematics_true_val),
         gps_location(gps_location_val), timestamp(timestamp_val),
         landed_state(landed_state_val), rc_data(rc_data_val), ready(ready_val), ready_message(message), can_arm(can_arm_val)
     {
