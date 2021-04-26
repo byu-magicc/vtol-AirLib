@@ -101,7 +101,7 @@ public: //TiltrotorApiBase implementation
     }
     virtual size_t getActuatorCount() const override
     {
-        return vehicle_params_->getParams().rotor_count;
+        return vehicle_params_->getParams().rotor_count*2 + 3; //has two inputs per tilting rotor and 3 inputs for flap servos
     }
     virtual void moveByRC(const RCData& rc_data) override
     {
