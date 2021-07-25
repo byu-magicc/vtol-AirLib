@@ -21,7 +21,8 @@ public:
                 sensor_factory));
         }
         else if (vehicle_setting->vehicle_type == "" || //default config
-            vehicle_setting->vehicle_type == AirSimSettings::kVehicleTypeTiltrotorSimple) {
+            vehicle_setting->vehicle_type == AirSimSettings::kVehicleTypeTiltrotorSimple 
+            || vehicle_setting->vehicle_type == AirSimSettings::kVehicleTypeArcherVTOLSimple) {
             config.reset(new TiltrotorSimpleParams(vehicle_setting, sensor_factory));
         }
         else
